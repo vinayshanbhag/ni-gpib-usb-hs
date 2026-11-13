@@ -6,6 +6,8 @@
 from .controller import NIUSBGPIB, GpibError, NI_VID, NI_GPIB_USB_HS_PID
 from .agilent34401a import Agilent34401A
 from .agilent53131a import Agilent53131A
+from .hp33120a import HP33120A
+from .ifr2031 import IFR2031
 
 __version__ = "0.1.0"
-__all__ = ["NIUSBGPIB", "Agilent34401A", "Agilent53131A", "GpibError", "NI_VID", "NI_GPIB_USB_HS_PID"]
+__all__ = ["NIUSBGPIB", "Agilent34401A", "Agilent53131A", "HP33120A", "IFR2031", "GpibError", "NI_VID", "NI_GPIB_USB_HS_PID"]
