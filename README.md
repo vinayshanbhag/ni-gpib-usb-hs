@@ -1,5 +1,51 @@
 # ni-gpib-usb-hs
 
+
+Added support for -
+
+- HP/Agilent/Keysight [53131A](https://raw.githubusercontent.com/vinayshanbhag/ni-gpib-usb-hs/refs/heads/main/ni_gpib_usb_hs/agilent53131a.py) Frequency Counter
+- HP/Agilent/Keysight [33120A](https://raw.githubusercontent.com/vinayshanbhag/ni-gpib-usb-hs/refs/heads/main/ni_gpib_usb_hs/hp33120a.py) 15MHz Function/Arbitrary waveform generator
+- Marconi/IFR/Aeroflex [2030/31/32](https://raw.githubusercontent.com/vinayshanbhag/ni-gpib-usb-hs/refs/heads/main/ni_gpib_usb_hs/ifr2031.py) RF signal generator 10kHz - 1.35/2.7/5.4GHz
+
+Tested with National Instruments GPIB USB HS and Agilent 53131A, HP 33120A and Marconi 2031
+
+### Usage Examples
+
+```python
+from ni_gpib_usb_hs import Agilent53131A
+with Agilent53131A(addr=3) as cnt:
+    print(cnt.idn())
+    print(cnt.frequency())                   # default autoranged Ch1 frequency
+    print(cnt.frequency(10e6, 1e-3, channel=2))
+    print(cnt.time_interval())               # Ch1 -> Ch2
+    print(cnt.statistics_of("frequency", 50))
+```
+
+``` python
+from ni_gpib_usb_hs import HP33120A
+with HP33120A(addr=10) as fg:
+    print(fg.idn())
+    fg.sine(1e3, 2.0, 0.5)             # APPLy:SINusoid 1 kHz, 2 Vpp, +0.5 V
+    fg.output_load("INF")              # high-Z load instead of 50 ohm
+    fg.configure_burst(ncycles=3, rate=100)
+    fg.burst(True)
+```
+
+``` python
+from ni_gpib_usb_hs import IFR2031
+with IFR2031(addr=25) as sg:
+    print(sg.idn())
+    sg.set_frequency(433.92e6)
+    sg.set_level(-30)                # dBm
+    sg.fm(3e3, source="INTF4")       # 3 kHz deviation, 1 kHz internal tone
+    sg.modulation_on()
+    sg.rf_on()
+```
+
+
+### Forked from [ni-gpib-usb-hs](https://github.com/embeddedci-com/ni-gpib-usb-hs)
+
+
 A **pure-Python, user-space driver for the National Instruments GPIB-USB-HS
 adapter itself** — it works with **any GPIB instrument** at any address, not
 just one model. No NI-488.2. No `linux-gpib`. No kernel module. Just
